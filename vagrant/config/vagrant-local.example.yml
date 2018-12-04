@@ -1,0 +1,20 @@
+# Are we need check box updates for every 'vagrant up'?
+box_check_update: false
+
+# Virtual machine name
+machine_name: example
+
+# Virtual machine IP
+ip: 192.168.10.10
+
+# Virtual machine CPU cores number
+cpus: 1
+
+# Virtual machine RAM
+memory: 512
+
+# Virtal machine port for forwarding
+port_virtual: 3000
+
+# Host machine port for forwarding
+port_host: 3000

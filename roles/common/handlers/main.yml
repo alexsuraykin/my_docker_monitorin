@@ -1,0 +1,5 @@
+---
+ - name: Remove the Docker installer file
+   file:
+     state: absent
+     path: /root/install_docker.sh

@@ -1,0 +1,31 @@
+---
+ - name: Create directory for influxDB data
+   file:
+      path: "/var/lib/influxdb"
+      state: directory
+      mode: 0600
+
+ - name: Run influxdb container
+   docker_container:
+      name: influxdb
+      image: influxdb
+      state: started
+      recreate: yes
+      restart_policy: always
+      purge_networks: yes
+      volumes:
+        - "/var/lib/influxdb:/var/lib/influxdb:z"
+      ports:
+        - "8086:8086"
+      networks:
+        - name: "bridge"
+        - name: "monitoring"
+
+ - name: Create database for monitoring in InfluxDB
+   uri:
+      url: "http://localhost:8086/query"
+      method: POST
+      body: "q=CREATE DATABASE \"telegraf\""
+      status_code: 200
+      body_format: raw
+   ignore_errors: yes

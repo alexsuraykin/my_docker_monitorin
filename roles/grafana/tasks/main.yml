@@ -1,0 +1,39 @@
+---
+ - name: Run grafana container
+   docker_container:
+      name: grafana
+      image: grafana/grafana
+      state: started
+      recreate: yes
+      restart_policy: always
+      purge_networks: yes
+      ports:
+        - "3000:3000"        
+      networks:
+        - name: "bridge"
+        - name: "monitoring"
+      env:
+        GF_SERVER_ROOT_URL: http://localhost
+        GF_SECURITY_ADMIN_PASSWORD: mypassword
+
+ - name: Create influxdb datasource
+   grafana_datasource:
+     name: "influxdb"
+     grafana_url: http://localhost:3000
+     grafana_user: "admin"
+     grafana_password: "mypassword"
+     org_id: "1"
+     ds_type: "influxdb"
+     url: "http://influxdb:8086"
+     database: "telegraf"
+     time_interval: ">10s"
+
+ - name: Import Grafana dashboard foo
+   grafana_dashboard:
+     grafana_url: http://localhost:3000
+     grafana_user: "admin"
+     grafana_password: "mypassword"
+     state: present
+     message: Updated by ansible
+     overwrite: yes
+     path: ./roles/grafana/files/docker.json
